@@ -148,11 +148,11 @@ Mở terminal tại thư mục gốc của project và chạy lệnh:
 python -m test.lab1_test
 
 5. Kết quả chạy
-Đầu ra SimpleTokenizer
-['i', 'love', 'nlp', '!', 'nlp', 'is', 'fun', ',', 'exciting', ',', 'and', 'challenging', '.']
-
-Đầu ra RegexTokenizer
-['i', 'love', 'nlp', '!', 'nlp', 'is', 'fun', ',', 'exciting', ',', 'and', 'challenging', '.']
+--- Tokenizing Sample Text from UD_English-EWT ---
+Original Sample: Al-Zaman : American forces killed Shaikh Abdullah al-Ani, the preacher at the
+mosque in the town of ...
+SimpleTokenizer Output (first 20 tokens): ['al-zaman', ':', 'american', 'forces', 'killed', 'shaikh', 'abdullah', 'al-ani', ',', 'the', 'preacher', 'at', 'the', 'mosque', 'in', 'the', 'town', 'of', 'qaim', ',']
+RegexTokenizer Output (first 20 tokens): ['-', ':', '-', ',', 'w', ',', '.', '[', 'w', '.', ']', ':', '.', 'w', 'w', '!', ',', 'w', '.', 'w']
 
 
 Nhận xét:
