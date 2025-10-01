@@ -14,6 +14,24 @@ Hoc_NLP/
 │── c4-train.00000-of-01024-30K.json.gz   # Dataset sample (30K docs)
 │── README.md
 ```
+
+## Sample Output
+
+### Pipeline Logs
+- Pipeline fitting took **5.76 seconds**
+- Data transformation of **1000 records** took **0.83 seconds**
+- Actual vocabulary size after preprocessing: **31355 terms**
+
+### Predictions (Top 5)
+```
+| text                                                                                 | label | prediction | probability                               |
+|-------------------------------------------------------------------------------------------------|-------|------------|-------------------------------------------|
+| Beginners BBQ Class Taking Place in Missoula!...                                                |   1   |    1.0     | [0.08089365040047715, 0.9191063495995229] |
+| Discussion in 'Mac OS X Lion (10.7)' started by axboi87...                                      |   0   |    0.0     | [0.9318268942860257, 0.06817310571397428] |
+| Foil plaid lycra and spandex shortall with metallic slinky insets...                            |   1   |    1.0     | [0.3848292760480332, 0.6151707239519668]  |
+| How many backlinks per day for new site?...                                                     |   1   |    1.0     | [0.20512775087427473, 0.7948722491257253] |
+| The Denver Board of Education opened the 2017-18 school year with an update on projects...  
+```
  Implementation Steps
 1. Dataset
 Dataset: C4 – Colossal Clean Crawled Corpus (subset).
