@@ -78,7 +78,7 @@ Chạy chương trình:
 bash
 Sao chép mã
 sbt "runMain com.harito.spark.Lab17_NLPPipeline"
-Mở Spark UI tại http://localhost:4040 để theo dõi.
+
 
  Results
 Pipeline fitting: ~6.36 giây cho 1000 mẫu.
