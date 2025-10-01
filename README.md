@@ -1,3 +1,4 @@
+```
 Hoc_NLP/
 │── build.sbt                     # SBT build file
 │── project/                      
@@ -11,7 +12,8 @@ Hoc_NLP/
 │                   └── spark/
 │                       └── Lab17_NLPPipeline.scala  # Main Scala source file
 │── c4-train.00000-of-01024-30K.json.gz   # Dataset sample (30K docs)
-│── README.md   
+│── README.md
+```
  Implementation Steps
 1. Dataset
 Dataset: C4 – Colossal Clean Crawled Corpus (subset).
