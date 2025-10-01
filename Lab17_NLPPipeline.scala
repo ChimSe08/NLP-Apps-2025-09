@@ -21,61 +21,39 @@ object Lab17_NLPPipeline {
     println(s"Spark UI available at http://localhost:4040")
     Thread.sleep(3000)
 
-    // 1. --- Read Dataset ---
     val dataPath = "D:/Hoc_NLP/c4-train.00000-of-01024-30K.json.gz"
     val initialDF = spark.read.json(dataPath).limit(1000)
     println(s"Successfully read ${initialDF.count()} records.")
     initialDF.printSchema()
     initialDF.show(5, truncate = false)
 
-    // Thêm label giả để huấn luyện Logistic Regression
     val dfWithLabel = initialDF.withColumn("label", length($"text") % 2)
 
-    // 2. --- Tokenization ---
     val tokenizer = new RegexTokenizer()
       .setInputCol("text")
       .setOutputCol("tokens")
       .setPattern("\\s+|[.,;!?()\"']")
 
-    // Nếu muốn thử Tokenizer thường thì comment RegexTokenizer và bật dòng này:
-    // val tokenizer = new Tokenizer().setInputCol("text").setOutputCol("tokens")
-
-    // 3. --- Stop Words Removal ---
     val stopWordsRemover = new StopWordsRemover()
       .setInputCol(tokenizer.getOutputCol)
       .setOutputCol("filtered_tokens")
 
-    // 4. --- Feature Extraction ---
     val hashingTF = new HashingTF()
       .setInputCol(stopWordsRemover.getOutputCol)
       .setOutputCol("raw_features")
-      .setNumFeatures(1000) // yêu cầu 2: giảm vector size
+      .setNumFeatures(1000) 
 
     val idf = new IDF()
       .setInputCol(hashingTF.getOutputCol)
       .setOutputCol("features")
 
-    // Nếu muốn thử Word2Vec thì comment HashingTF + IDF và bật đoạn này:
-    /*
-    val word2Vec = new Word2Vec()
-      .setInputCol("filtered_tokens")
-      .setOutputCol("features")
-      .setVectorSize(100)
-      .setMinCount(0)
-    */
-
-    // 5. --- Logistic Regression (classification) ---
     val lr = new LogisticRegression()
       .setMaxIter(10)
       .setRegParam(0.01)
 
-    // 6. --- Assemble Pipeline ---
     val pipeline = new Pipeline()
       .setStages(Array(tokenizer, stopWordsRemover, hashingTF, idf, lr))
-      // Nếu dùng Word2Vec thay cho TF-IDF thì pipeline như sau:
-      // .setStages(Array(tokenizer, stopWordsRemover, word2Vec, lr))
-
-    // --- Fit & Transform ---
+   
     println("\nFitting the NLP pipeline...")
     val fitStartTime = System.nanoTime()
     val pipelineModel = pipeline.fit(dfWithLabel)
