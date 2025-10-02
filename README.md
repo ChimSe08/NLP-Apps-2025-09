@@ -24,6 +24,42 @@ Hoc_NLP/
 - Data transformation of **1000 records** took **0.83 seconds**
 - Actual vocabulary size after preprocessing: **31355 terms**
 
+Tokenization
+
+Sau khi tách từ bằng RegexTokenizer:
+```
++---+--------------------------------------------------------------------------------+
+| id|                                                                           words|
++---+--------------------------------------------------------------------------------+
+|  0|[beginners, bbq, class, taking, place, in, missoula!, do, you, want, to, get,...|
+|  1|[discussion, in, mac, os, x, lion, (10, 7), started, by, axboi87, jan, 20, 20...|
+|  2|[foil, plaid, lycra, and, spandex, shortall, with, metallic, slinky, insets, ...|
++---+--------------------------------------------------------------------------------+
+only showing top 3 rows
+```
+
+ Stage [Tokenization] completed in ~109 ms
+
+Stopword Removal
+
+Sau khi loại bỏ stop words:
+```
++---+--------------------------------------------------------------------------------+
+| id|                                                                        filtered|
++---+--------------------------------------------------------------------------------+
+|  0|[beginners, bbq, class, taking, place, missoula!, want, get, better, making, ...|
+|  1|[discussion, mac, os, x, lion, (10, 7), started, axboi87, jan, 20, 2012, ve, ...|
+|  2|[foil, plaid, lycra, spandex, shortall, metallic, slinky, insets, attached, m...|
++---+--------------------------------------------------------------------------------+
+only showing top 3 rows
+```
+
+ Stage [Stopword Removal] completed in ~91 ms
+
+Vectorization + Training
+
+Quá trình CountVectorizer + IDF + Normalizer hoàn tất.
+ Stage [Vectorization + Training] completed in ~2622 ms
 ### Predictions (Top 5)
 ```
 | text                                                                                 | label | prediction | probability                               |
