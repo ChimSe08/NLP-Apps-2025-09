@@ -215,4 +215,4 @@ Sim=0.1659 | Text: It was time to pack up camp and head north. Our drive to New 
 
 Cho thấy pipeline có thể dùng không chỉ để phân loại mà còn để tìm kiếm văn bản tương tự.
 
-Đây là một bước mở rộng giúp ứng dụng vào hệ thống gợi ý và tìm kiếm thông ti
+Đây là một bước mở rộng giúp ứng dụng vào hệ thống gợi ý và tìm kiếm thông tin
