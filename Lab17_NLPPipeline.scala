@@ -6,6 +6,7 @@ import org.apache.spark.ml.Pipeline
 import org.apache.spark.ml.feature._
 import org.apache.spark.sql.functions._
 import java.io.{File, PrintWriter}
+import org.apache.spark.ml.linalg.Vector
 
 object Lab17_NLPPipeline {
   def main(args: Array[String]): Unit = {
@@ -41,19 +42,25 @@ object Lab17_NLPPipeline {
     val hashingTF = new HashingTF()
       .setInputCol(stopWordsRemover.getOutputCol)
       .setOutputCol("raw_features")
-      .setNumFeatures(1000) 
+      .setNumFeatures(1000)
 
     val idf = new IDF()
       .setInputCol(hashingTF.getOutputCol)
-      .setOutputCol("features")
+      .setOutputCol("tfidf_features")
+
+    // --- NEW: Normalizer ---
+    val normalizer = new Normalizer()
+      .setInputCol("tfidf_features")
+      .setOutputCol("features") // Logistic Regression dùng cột này
+      .setP(2.0)
 
     val lr = new LogisticRegression()
       .setMaxIter(10)
       .setRegParam(0.01)
 
     val pipeline = new Pipeline()
-      .setStages(Array(tokenizer, stopWordsRemover, hashingTF, idf, lr))
-   
+      .setStages(Array(tokenizer, stopWordsRemover, hashingTF, idf, normalizer, lr))
+
     println("\nFitting the NLP pipeline...")
     val fitStartTime = System.nanoTime()
     val pipelineModel = pipeline.fit(dfWithLabel)
@@ -107,6 +114,38 @@ object Lab17_NLPPipeline {
           resultWriter.println(s"Features: ${row.getAs[org.apache.spark.ml.linalg.Vector]("features")}")
         }
     } finally resultWriter.close()
+
+    // --- NEW: Cosine Similarity Demo ---
+    println("\n--- Cosine Similarity Demo ---")
+
+    // Lấy 1 văn bản bất kỳ (vd: document đầu tiên)
+    val sampleRow = transformedDF.limit(1).collect()(0)
+    val sampleText = sampleRow.getAs[String]("text")
+    val sampleVec = sampleRow.getAs[Vector]("features")
+
+    def cosineSim(v1: Vector, v2: Vector): Double = {
+      val arr1 = v1.toArray
+      val arr2 = v2.toArray
+      val dot = arr1.zip(arr2).map { case (a, b) => a * b }.sum
+      val norm1 = math.sqrt(arr1.map(x => x * x).sum)
+      val norm2 = math.sqrt(arr2.map(x => x * x).sum)
+      if (norm1 == 0.0 || norm2 == 0.0) 0.0 else dot / (norm1 * norm2)
+    }
+
+    val sims = transformedDF.rdd.map { row =>
+      val txt = row.getAs[String]("text")
+      val vec = row.getAs[Vector]("features")
+      val sim = cosineSim(sampleVec, vec)
+      (txt, sim)
+    }
+
+    val top10 = sims.top(10)(Ordering.by(_._2))
+
+    println(s"\nSample text: ${sampleText.take(200)}...\n")
+    println("Top 10 most similar documents:")
+    top10.foreach { case (txt, sim) =>
+      println(f"Sim=$sim%.4f | Text: ${txt.take(120)}...")
+    }
 
     spark.stop()
     println("Spark Session stopped.")
