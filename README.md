@@ -1,7 +1,9 @@
 ```
 Hoc_NLP/
 │── build.sbt                     # SBT build file
-│── project/                      
+│── project/
+│── results/
+│   └── lab17_pipeline_output.txt/                        
 │── src/
 │   └── main/
 │       ├── resources/
@@ -31,166 +33,102 @@ Hoc_NLP/
 | Foil plaid lycra and spandex shortall with metallic slinky insets...                            |   1   |    1.0     | [0.3848292760480332, 0.6151707239519668]  |
 | How many backlinks per day for new site?...                                                     |   1   |    1.0     | [0.20512775087427473, 0.7948722491257253] |
 | The Denver Board of Education opened the 2017-18 school year with an update on projects...  
+
 ```
- Implementation Steps
-1. Dataset
-Dataset: C4 – Colossal Clean Crawled Corpus (subset).
+```
+ # Lab 17: Spark NLP Pipeline with Cosine Similarity
 
-File sử dụng: c4-train.00000-of-01024-30K.json.gz.
+## Implementation Steps
+Pipeline được cài đặt theo các bước:
+1. **Dataset**  
+   - Nguồn: C4 – Colossal Clean Crawled Corpus (subset).  
+   - File: `c4-train.00000-of-01024-30K.json.gz`.  
+   - Load 1000 mẫu để giảm thời gian chạy (có biến `limitDocuments` để chỉnh).  
 
-Load 1000 mẫu để xử lý nhanh hơn.
+2. **NLP Pipeline Stages**
+   - `RegexTokenizer`: tách text thành tokens.  
+   - `StopWordsRemover`: loại bỏ stop words.  
+   - `CountVectorizer`: biến tokens thành vector.  
+   - `IDF`: tính trọng số TF-IDF.  
+   - `Normalizer`: chuẩn hóa vector TF-IDF về norm = 1.  
+   - (Mở rộng): LogisticRegression thử nghiệm phân loại với label giả.  
 
-2. NLP Pipeline
-Pipeline bao gồm các stage:
+3. **Cosine Similarity**
+   - Chọn một văn bản làm query.  
+   - Tính cosine similarity với tất cả văn bản khác.  
+   - In ra Top 5 văn bản tương tự nhất.  
 
-RegexTokenizer – tách văn bản thành tokens.
+---
 
-StopWordsRemover – loại bỏ stop words.
-
-HashingTF – vector hóa tokens thành feature vector (numFeatures = 1000).
-
-IDF (Inverse Document Frequency) – tính trọng số TF-IDF.
-
-LogisticRegression – mô hình phân loại (nhãn giả label = length(text) % 2).
-
-3. Outputs
-Kết quả tiền xử lý và phân loại được lưu trong results/lab17_pipeline_output.txt.
-
-Log hiệu năng được lưu trong log/lab17_metrics.log.
-
- How to Run
-Clone repo:
-
-bash
-Sao chép mã
-git clone <repo_url>
-cd Hoc_NLP
-Cài đặt môi trường:
+## How to Run
+1. Clone repo:
+   ```bash
+   git clone <repo_url>
+   cd Hoc_NLP
+```
+2. Cài đặt môi trường:
 
 Java 17
 
-SBT (Scala Build Tool)
+SBT 1.11.6+
 
 Apache Spark 3.5+
 
-Chạy chương trình:
+3. Chạy chương trình:
 
 bash
 Sao chép mã
 sbt "runMain com.harito.spark.Lab17_NLPPipeline"
 
+4. Kết quả:
 
- Results
-Pipeline fitting: ~6.36 giây cho 1000 mẫu.
+Console hiển thị log + thời gian từng stage (Read Data, Tokenization, Stopword Removal, Vectorization, Cosine Similarity, Save).
 
-Data transformation: ~0.97 giây.
+File kết quả: results/lab17_pipeline_output.txt.
 
-Vocabulary size sau preprocessing: 31,355 từ.
+Results
+Pipeline fitting: ~6s cho 1000 mẫu.
 
-Vì numFeatures = 1000 nhỏ hơn số vocab → có hash collisions.
+Data transformation: ~1s.
 
-Ví dụ kết quả dự đoán:
+Vocabulary size: ~31K terms → bị hash collisions khi numFeatures=1000.
 
-vbnet
+Ví dụ kết quả cosine similarity:
+
+csharp
 Sao chép mã
-text: "Beginners BBQ Class Taking Place in Missoula!..."
-label: 1
-prediction: 1.0
-probability: [0.08, 0.91]
- Difficulties & Solutions
-Lỗi đường dẫn: ban đầu Spark báo Path does not exist.
-→ Sửa thành đường dẫn tuyệt đối D:/Hoc_NLP/c4-train.00000-of-01024-30K.json.gz.
-
-Lỗi chuỗi trong Scala: viết nhầm ""path"".
-→ Sửa thành "path".
-
-Cảnh báo BLAS: Spark không load được thư viện native.
-→ Không ảnh hưởng đến kết quả, chỉ giảm tốc độ.
-
-4. Normalization of Count Vectors
-
-Mục đích
-
-Sau khi tính TF-IDF, mỗi văn bản được biểu diễn thành một vector.
-
-Các vector này có độ dài khác nhau, nên cần chuẩn hóa để dễ so sánh.
-
-Normalization đưa mọi vector về cùng độ dài (norm = 1).
-
-Cách thực hiện
-
-Dùng Normalizer trong Spark ML.
-
-Normalizer đảm bảo tất cả các vector sau khi xử lý đều có độ dài bằng 1 (L2 norm).
-
-Code bổ sung
-```
-val normalizer = new Normalizer()
-  .setInputCol("features")
-  .setOutputCol("norm_features")
-  .setP(2.0)   // L2 normalization
-```
-
-Stage này được thêm sau IDF trong pipeline.
-
-Kết quả ví dụ
-```
-Features: (1000,[5,23,59],[0.32,0.45,0.18])
-Norm_Features: (1000,[5,23,59],[0.56,0.78,0.31])
-```
-5. Cosine Similarity Demo
-
-Mục đích
-
-Lấy một văn bản bất kỳ làm “query”.
-
-Tìm văn bản khác giống nó nhất (hoặc top 10 giống nhất).
-
-Độ đo: Cosine Similarity.
-
-Cách thực hiện
-
-Lấy ngẫu nhiên một document trong DataFrame.
-
-Tính tích vô hướng (dot product) giữa vector chuẩn hóa của document đó với toàn bộ văn bản khác.
-
-Sắp xếp theo cosine similarity giảm dần.
-
-Lấy top 1 hoặc top 10.
-
-Code minh họa
-```
-// ví dụ chọn 1 văn bản làm query
-val sample = transformedDF.limit(1).collect()(0)
-val sampleVector = sample.getAs[Vector]("norm_features")
-
-// UDF tính cosine similarity
-val dot_udf = udf((v1: Vector, v2: Vector) =>
-  v1.asBreeze.dot(v2.asBreeze)
-)
-
-val similarities = transformedDF
-  .withColumn("cosine_sim", dot_udf(lit(sampleVector), $"norm_features"))
-  .orderBy(desc("cosine_sim"))
-  .limit(10)
-
-similarities.select("text", "cosine_sim").show(false)
-
-```
-Kết quả ví dụ
-```
 Top 5 most similar documents:
-[info] Sim=1,0000 | Text: Beginners BBQ Class Taking Place in Missoula!
-[info] Do you want to get better at making delicious BBQ? You will have the oppor...
-[info] Sim=0,2630 | Text: The latest in Jazz North East∩┐╜s series of Schmazz gigs at the Jazz Caf∩┐╜ featured British guitarists Mike Walker and Stua...
-[info] Sim=0,2072 | Text: Unlike many of his peers, Crane is quick to let down his hair [not literally, of course].
-[info] You might know Ben Crane best ...
-[info] Sim=0,2018 | Text: Sign up to Lineout to stay up to date with all of the latest RUPA news / Thanks for subscribing!
-[info] With Rugby World Cup (∩┐╜...
-[info] Sim=0,1979 | Text: The results of the NOMAD crowd-sourced data analytics competition with Kaggle are out!
+[54] Sim=0.4666 | Know Buckeye Trail Class of 2001 graduates...
+[311] Sim=0.2786 | UChicago chose a Class Day speaker...
+[278] Sim=0.2593 | Class A Burn Prop - Stove Simulator...
+...
+Ý nghĩa: Document "BBQ Class" có similarity cao với các văn bản khác chứa từ “class” → pipeline hoạt động đúng.
+
+Difficulties & Solutions
+Path error: ban đầu Spark báo “Path does not exist” → sửa thành đường dẫn tuyệt đối D:/Hoc_NLP/....
+
+Scala string error: nhầm dấu ""path"" → sửa thành "path".
+
+BLAS warning: Spark không load thư viện native → chỉ ảnh hưởng tốc độ, không ảnh hưởng kết quả.
+
+sbt server lock error (ServerAlreadyBootingException) → giải quyết bằng cách chọn y để tạo server mới khi sbt hỏi.
+
+Normalization
+Sau TF-IDF, các vector có độ dài khác nhau.
+
+Normalizer đảm bảo tất cả vector có norm = 1 → dễ so sánh cosine similarity.
+
+Ví dụ:
 ```
-Ý nghĩa
+makefile
+Sao chép mã
+TF-IDF:  (1000,[5,23,59],[0.32,0.45,0.18])
+NormVec: (1000,[5,23,59],[0.56,0.78,0.31])
+```
+References
 
-Cho thấy pipeline có thể dùng không chỉ để phân loại mà còn để tìm kiếm văn bản tương tự.
+Apache Spark MLlib Documentation
 
-Đây là một bước mở rộng giúp ứng dụng vào hệ thống gợi ý và tìm kiếm thông tin
+Spark NLP Lab Instructions
+
+C4 Dataset (Colossal Clean Crawled Corpus)
