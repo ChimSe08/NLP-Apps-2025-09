@@ -22,9 +22,15 @@ object Lab17_NLPPipeline {
     println(s"Spark UI available at http://localhost:4040")
     Thread.sleep(3000)
 
+    // --- NEW: dễ chỉnh số lượng document ---
+    val limitDocuments = 1000   // chỉnh con số này nếu muốn xử lý nhiều/ít hơn
     val dataPath = "D:/Hoc_NLP/c4-train.00000-of-01024-30K.json.gz"
-    val initialDF = spark.read.json(dataPath).limit(1000)
-    println(s"Successfully read ${initialDF.count()} records.")
+
+    val readStart = System.nanoTime()
+    val initialDF = spark.read.json(dataPath).limit(limitDocuments)
+    val readDuration = (System.nanoTime() - readStart) / 1e9d
+
+    println(f"Successfully read ${initialDF.count()} records in $readDuration%.2f seconds.")
     initialDF.printSchema()
     initialDF.show(5, truncate = false)
 
@@ -48,10 +54,10 @@ object Lab17_NLPPipeline {
       .setInputCol(hashingTF.getOutputCol)
       .setOutputCol("tfidf_features")
 
-    // --- NEW: Normalizer ---
+    // --- Normalizer ---
     val normalizer = new Normalizer()
       .setInputCol("tfidf_features")
-      .setOutputCol("features") // Logistic Regression dùng cột này
+      .setOutputCol("features")
       .setP(2.0)
 
     val lr = new LogisticRegression()
@@ -86,11 +92,12 @@ object Lab17_NLPPipeline {
     transformedDF.select("text", "label", "prediction", "probability").show(5, truncate = false)
 
     // --- Write Metrics ---
-    val log_path = "../log/lab17_metrics.log"
+    val log_path = "results/lab17_metrics.log"   // đổi để ghi ngay trong thư mục dự án
     new File(log_path).getParentFile.mkdirs()
     val logWriter = new PrintWriter(new File(log_path))
     try {
       logWriter.println("--- Performance Metrics ---")
+      logWriter.println(f"Read data duration: $readDuration%.2f seconds")
       logWriter.println(f"Pipeline fitting duration: $fitDuration%.2f seconds")
       logWriter.println(f"Data transformation duration: $transformDuration%.2f seconds")
       logWriter.println(s"Vocabulary size: $actualVocabSize")
@@ -98,7 +105,7 @@ object Lab17_NLPPipeline {
     } finally logWriter.close()
 
     // --- Write Output ---
-    val result_path = "../results/lab17_pipeline_output.txt"
+    val result_path = "results/lab17_pipeline_output.txt"
     new File(result_path).getParentFile.mkdirs()
     val resultWriter = new PrintWriter(new File(result_path))
     try {
@@ -110,15 +117,14 @@ object Lab17_NLPPipeline {
           resultWriter.println(s"Text: ${row.getAs[String]("text").take(100)}...")
           resultWriter.println(s"Label: ${row.getAs[Double]("label")}")
           resultWriter.println(s"Prediction: ${row.getAs[Double]("prediction")}")
-          resultWriter.println(s"Probability: ${row.getAs[org.apache.spark.ml.linalg.Vector]("probability")}")
-          resultWriter.println(s"Features: ${row.getAs[org.apache.spark.ml.linalg.Vector]("features")}")
+          resultWriter.println(s"Probability: ${row.getAs[Vector]("probability")}")
+          resultWriter.println(s"Features: ${row.getAs[Vector]("features")}")
         }
     } finally resultWriter.close()
 
-    // --- NEW: Cosine Similarity Demo ---
+    // --- Cosine Similarity Demo ---
     println("\n--- Cosine Similarity Demo ---")
 
-    // Lấy 1 văn bản bất kỳ (vd: document đầu tiên)
     val sampleRow = transformedDF.limit(1).collect()(0)
     val sampleText = sampleRow.getAs[String]("text")
     val sampleVec = sampleRow.getAs[Vector]("features")
@@ -139,13 +145,20 @@ object Lab17_NLPPipeline {
       (txt, sim)
     }
 
-    val top10 = sims.top(10)(Ordering.by(_._2))
+    val top5 = sims.top(5)(Ordering.by(_._2))
 
     println(s"\nSample text: ${sampleText.take(200)}...\n")
-    println("Top 10 most similar documents:")
-    top10.foreach { case (txt, sim) =>
+    println("Top 5 most similar documents:")
+    top5.foreach { case (txt, sim) =>
       println(f"Sim=$sim%.4f | Text: ${txt.take(120)}...")
     }
+
+    // --- Giữ Spark UI chạy vô thời hạn ---
+    println("\nSpark job đã chạy xong.")
+    println("Spark UI đang mở, truy cập tại http://localhost:4040 (hoặc 4041, 4042...)")
+    println("Nhấn Ctrl+C trong terminal để dừng Spark.")
+
+    Thread.sleep(Long.MaxValue)
 
     spark.stop()
     println("Spark Session stopped.")
