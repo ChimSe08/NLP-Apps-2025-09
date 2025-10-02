@@ -179,37 +179,15 @@ similarities.select("text", "cosine_sim").show(false)
 ```
 Kết quả ví dụ
 ```
-**Sample text:**  
-*"Beginners BBQ Class Taking Place in Missoula!"*
-
-### Top 10 most similar documents
-
-Sim=1.0000 | Text: Beginners BBQ Class Taking Place in Missoula!
-Do you want to get better at making delicious BBQ? You will have the oppor...
-
-Sim=0.2630 | Text: The latest in Jazz North East∩┐╜s series of Schmazz gigs at the Jazz Caf∩┐╜ featured British guitarists Mike Walker and Stua...
-
-Sim=0.2072 | Text: Unlike many of his peers, Crane is quick to let down his hair [not literally, of course].
-You might know Ben Crane best ...
-
-Sim=0.2018 | Text: Sign up to Lineout to stay up to date with all of the latest RUPA news / Thanks for subscribing!
-With Rugby World Cup (∩┐╜...
-
-Sim=0.1979 | Text: The results of the NOMAD crowd-sourced data analytics competition with Kaggle are out!
-The goal of this competition was ...
-
-Sim=0.1839 | Text: MAMADOU SAKHO remains unavailable for selection for Liverpool's Europa League semi-final first leg clash with Villarreal...
-
-Sim=0.1805 | Text: HOUGHTON ∩┐╜ Whether you∩┐╜re a survivor, family member, caregiver or neighbor, events like th...
-
-Sim=0.1702 | Text: Have you ever been there? It also clarifies that you understand what they are saying.
-Even though the language we use to...
-
-Sim=0.1696 | Text: ArtikPix is an app designed to help children improve their speech production at the word and sentence levels.
-This app i...
-
-Sim=0.1659 | Text: It was time to pack up camp and head north. Our drive to New Bern/Beaufort area was only 2 hours; allowing ample time to...
-
+Top 5 most similar documents:
+[info] Sim=1,0000 | Text: Beginners BBQ Class Taking Place in Missoula!
+[info] Do you want to get better at making delicious BBQ? You will have the oppor...
+[info] Sim=0,2630 | Text: The latest in Jazz North East∩┐╜s series of Schmazz gigs at the Jazz Caf∩┐╜ featured British guitarists Mike Walker and Stua...
+[info] Sim=0,2072 | Text: Unlike many of his peers, Crane is quick to let down his hair [not literally, of course].
+[info] You might know Ben Crane best ...
+[info] Sim=0,2018 | Text: Sign up to Lineout to stay up to date with all of the latest RUPA news / Thanks for subscribing!
+[info] With Rugby World Cup (∩┐╜...
+[info] Sim=0,1979 | Text: The results of the NOMAD crowd-sourced data analytics competition with Kaggle are out!
 ```
 Ý nghĩa
 
