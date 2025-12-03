@@ -1,3 +1,23 @@
+```
+lab5_pytorch_repo/
+│── src/
+│   ├── __init__.py
+│   └── lab5_pytorch.py        # toàn bộ code notebook đóng gói trong run_all()
+│
+│── notebook/
+│   └── Lab5_PyTorch.ipynb     # notebook gốc
+│
+│── test/
+│   └── test_import.py         # test đơn giản
+│
+│── report/
+|   └── README.md                       
+│── data/
+│   └── README.md              
+│
+└── README.md
+```
+ 
  Mục tiêu bài lab
 
 Làm quen với Tensor trong PyTorch
