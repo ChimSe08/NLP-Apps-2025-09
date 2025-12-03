@@ -1,21 +1,24 @@
 ```
-lab5_pytorch_repo/
+lab5_part1_pytorch_detailed_repo/
 │── src/
 │   ├── __init__.py
-│   └── lab5_pytorch.py        # toàn bộ code notebook đóng gói trong run_all()
+│   ├── tensors_intro.py   # Task 1.x – tensor: tạo, toán tử, indexing, reshape, device
+│   ├── autograd_intro.py  # Task 2.x – autograd, gradient, computational graph
+│   ├── nn_intro.py        # Task 3.x – nn.Linear, nn.Embedding, nn.Module
+│   └── main.py            # run_all() gọi lần lượt 3 phần trên
 │
 │── notebook/
-│   └── Lab5_PyTorch.ipynb     # notebook gốc
-│
+│   └── Lab5_PyTorch.ipynb
 │── test/
-│   └── test_import.py         # test đơn giản
-│
+│   ├── test_import_main.py
+│   └── test_tasks_smoke.py
 │── report/
-|   └── README.md                       
+|   └── README.md
 │── data/
-│   └── README.md              
-│
-└── README.md
+│   └── README.md
+│── README.md
+└── .gitignore
+
 ```
  
  Mục tiêu bài lab
