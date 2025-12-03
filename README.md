@@ -1,3 +1,35 @@
+```
+lab5_part3_pos/
+│── src/
+│   ├── data_loader.py        # Task 1: đọc file .conllu
+│   ├── vocab.py              # Task 1: build word_to_ix, tag_to_ix
+│   ├── dataset.py            # Task 2: POSDataset
+│   ├── collate.py            # Task 2: pad_sequence batch
+│   ├── model_rnn.py          # Task 3: SimpleRNNForTokenClassification
+│   ├── train.py              # Task 4: vòng lặp training
+│   ├── evaluate.py           # Task 5: evaluate + accuracy
+│   └── main.py               # Pipeline đầy đủ: load → vocab → dataloader → train → eval → predict
+│
+│── data/
+│   ├── en_ewt-ud-train.conllu
+│   ├── en_ewt-ud-dev.conllu
+│   └── README.md
+│
+│── test/
+│   ├── test_data_loader.py
+│   ├── test_vocab.py
+│   ├── test_dataset.py
+│   ├── test_model.py
+│   └── test_training.py
+│
+│── notebook/
+│   └── Lab5_part3.ipynb      # Notebook gốc
+│
+│── report/
+│── README.md
+│── .gitignore
+
+```
 ## KẾT QUẢ THỰC HIỆN
 Độ chính xác trên tập dev:
 0.8683
