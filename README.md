@@ -1,3 +1,24 @@
+```
+lab5_repo/
+│── src/
+│   ├── __init__.py
+│   └── lab5_part2.py        # chứa toàn bộ pipeline trong hàm run_all()
+│
+│── notebook/
+│   └── Lab5_part2.ipynb     # notebook gốc của bạn
+│
+│── test/
+│   └── test_lab5_part2.py   # pytest skeleton (test import + run_all tồn tại)
+│
+│── report/                  # để bạn tự thêm file báo cáo
+│
+│── data/
+│   └── hwu.tar.gz            # nhắc không commit dataset lớn
+│
+│── README.md                # mô tả cấu trúc & cách chạy
+└── .gitignore               # ignore data lớn, cache, ipynb_checkpoints
+```
+
 # 1. Mục tiêu
 
 Mục tiêu của bài thực hành là tìm hiểu, xây dựng và so sánh các mô hình phân loại văn bản từ truyền thống đến hiện đại, qua đó hiểu rõ vai trò của việc mô hình hóa ngữ cảnh trong ngôn ngữ tự nhiên.
