@@ -1,4 +1,29 @@
 Lab 2: Count Vectorization
+```
+Lab2/
+│
+├── src/                     # Chứa mã nguồn chính của project
+│   ├── core/                # Các thành phần lõi
+│   │   ├── interfaces.py    # Định nghĩa các interface / abstract classes
+│   │   └── tokenizer.py     # Triển khai bộ tách từ (tokenizer)
+│   │
+│   └── representations/     # Các mô-đun biểu diễn văn bản
+│       └── count_vectorizer.py   # Triển khai CountVectorizer thủ công
+│
+├── test/                    # Chứa các đoạn code kiểm thử
+│   └── lab2_test.py         # File test cho toàn bộ bài Lab 2
+│
+├── notebook/                # Chứa các notebook để thử nghiệm nhanh
+│
+├── data/                    # Lưu dữ liệu thô hoặc dữ liệu mẫu phục vụ chạy thử
+│
+├── report/                  # Báo cáo bài tập, file PDF/Word
+│
+├── README.md                # Giới thiệu tổng quan về project, cách chạy
+│
+└── .gitignore               # Loại bỏ các file không cần thiết khỏi Git
+
+```
 1. Mục tiêu
 
 Xây dựng CountVectorizer để biến văn bản thành vector số học theo phương pháp Bag-of-Words.
