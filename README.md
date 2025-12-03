@@ -1,4 +1,32 @@
+```
+lab5_part4_repo/
+│── src/
+│   ├── __init__.py
+│   ├── data_loader.py      # load_dataset("conll2003"), trích tokens + ner_tags
+│   ├── vocab_builder.py    # build_word_vocab, build_tag_vocab, PAD/UNK
+│   ├── dataset.py          # class NERDataset (PyTorch Dataset)
+│   ├── collate_fn.py       # ner_collate_fn: pad câu & nhãn, dùng pad_tag_value=-100
+│   ├── model_rnn.py        # class RNNForNER: Embedding + nn.RNN + Linear
+│   ├── train.py            # train_model(): loop epoch, in loss, eval val
+│   ├── evaluate.py         # evaluate_accuracy(), predict_sentence()
+│   └── main.py             # run_pipeline(): nối toàn bộ Task 1 → 5
+│
+│── notebook/
+│   └── lab5_part4.ipynb    # notebook 
+│
+│── test/
+│   ├── test_vocab.py       # test build vocab
+│   ├── test_dataset.py     # test NERDataset
+│   ├── test_model.py       # test forward RNN shape
+│   └── test_training.py    # train 1 epoch toy để kiểm tra code không crash
+│
+│── data/
+│   └── README.md           # nhắc không commit dataset lớn
+│
+├── README.md               # giải thích cách chạy, pipeline
+└── .gitignore              # ignore data lớn, cache, ipynb_checkpoints, v.v.
 
+```
 # 1. Mục tiêu
 
 Trong phần này, mục tiêu là xây dựng một mô hình Nhận dạng Thực thể Tên (Named Entity Recognition – NER) sử dụng:
