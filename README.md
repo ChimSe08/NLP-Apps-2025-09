@@ -12,7 +12,7 @@ lab5_part4_repo/
 │   └── main.py             # run_pipeline(): nối toàn bộ Task 1 → 5
 │
 │── notebook/
-│   └── lab5_part4.ipynb    # notebook 
+│   └── lab5_part4.ipynb    # notebook
 │
 │── test/
 │   ├── test_vocab.py       # test build vocab
@@ -20,11 +20,14 @@ lab5_part4_repo/
 │   ├── test_model.py       # test forward RNN shape
 │   └── test_training.py    # train 1 epoch toy để kiểm tra code không crash
 │
+│── report/
+|    └── README.md                   
 │── data/
-│   └── README.md           # nhắc không commit dataset lớn
+│   └── README.md           
 │
 ├── README.md               # giải thích cách chạy, pipeline
 └── .gitignore              # ignore data lớn, cache, ipynb_checkpoints, v.v.
+
 
 ```
 # 1. Mục tiêu
