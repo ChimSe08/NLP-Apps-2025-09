@@ -9,7 +9,8 @@ lab5_repo/
 │
 │── test/
 │   └── test_lab5_part2.py   # pytest skeleton (test import + run_all tồn tại)
-│
+│── report/
+|   └── README.md    
 │
 │── data/
 │   └── hwu.tar.gz            # nhắc không commit dataset lớn
