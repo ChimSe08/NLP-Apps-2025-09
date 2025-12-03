@@ -1,5 +1,22 @@
 #  Lab 4 – Word Embeddings (Word2Vec, GloVe)
+```
+lab4_word_embeddings_pack/
+│
+├── src/
+│   └── representations/          # Các mô-đun biểu diễn từ
+│       ├── __init__.py           # Khởi tạo package representations
+│       └── word_embedder.py      # Triển khai lớp WordEmbedder (Word2Vec, embeddings)
+│       │
+│       └── test/                 # Chứa code kiểm thử cho module representations
+│
+├── lab4_embedding_training_demo.py   # Demo huấn luyện mô hình Word Embedding
+├── lab4_spark_word2vec_demo.py       # Demo Word2Vec dùng PySpark
+├── lab4_test.py                      # File test tổng của bài Lab 4
+│
+├── requirements.txt                  # Danh sách thư viện cần cài đặt
+├── README.md                         # Giới thiệu chung về bài Lab
 
+```
 ##  1. Mục tiêu
 
 Mục tiêu của Lab 4 là tìm hiểu và thực hành **biểu diễn từ (word embeddings)** bằng cách sử dụng thư viện `gensim` và `PySpark`.  
