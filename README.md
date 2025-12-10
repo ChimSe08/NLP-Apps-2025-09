@@ -1,3 +1,30 @@
+```
+lab6_dependency_parsing/
+│── src/
+│   ├── __init__.py
+│   ├── model_loader.py
+│   ├── visualize_dep.py
+│   ├── inspect_tree.py
+│   ├── extract_relations.py
+│   ├── exercises.py
+│   └── main.py
+│
+│── notebook/
+│   └── lab6_dependency_parsing.ipynb   
+│
+│── test/
+│   ├── test_exercises.py
+│   └── test_imports.py
+│
+│── report/                            
+│
+│── data/
+│                    
+│
+│── README.md
+
+```
+
 1. Giới thiệu
 
 Phân tích cú pháp phụ thuộc (Dependency Parsing) là một kỹ thuật trong xử lý ngôn ngữ tự nhiên giúp xác định cấu trúc ngữ pháp của câu thông qua các quan hệ giữa từ điều khiển (head) và từ phụ thuộc (dependent).
