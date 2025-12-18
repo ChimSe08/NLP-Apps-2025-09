@@ -14,6 +14,7 @@ Thiết kế mã nguồn với kiến trúc hướng đối tượng, dễ mở 
 Cấu trúc dự án được thiết kế như sau để dễ quản lý:
 
 Lab_1/
+```
 │
 ├── src/
 │   ├── core/
@@ -29,7 +30,7 @@ Lab_1/
 │   └── sample.txt                 # File dữ liệu văn bản thô
 │
 └── README.md                      # Báo cáo Lab 1
-
+```
 3. Các bước triển khai
 Bước 1. Định nghĩa Interface Tokenizer
 
